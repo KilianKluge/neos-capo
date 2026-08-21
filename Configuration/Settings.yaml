@@ -9,3 +9,6 @@ Neos:
         'head':
           position: 'before dispatch'
           middleware: 'DMF\Capo\Http\HeadMiddleware'
+Capo:
+  options:
+    display_warnings: true
