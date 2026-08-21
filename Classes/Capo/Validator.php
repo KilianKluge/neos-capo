@@ -11,8 +11,6 @@
 
 namespace DMF\Capo\Capo;
 
-defined( 'ABSPATH' ) || exit;
-
 class Validator {
 
 	/**
