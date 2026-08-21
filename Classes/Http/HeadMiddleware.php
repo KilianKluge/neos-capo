@@ -2,7 +2,7 @@
 
 namespace DMF\Capo\Http;
 
-use Capo\Parser;
+use DMF\Capo\Capo\Parser;
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
