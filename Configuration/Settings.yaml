@@ -1,0 +1,11 @@
+Neos:
+  Neos:
+    fusion:
+      autoInclude:
+        DMF.Capo: true
+  Flow:
+    http:
+      middlewares:
+        'head':
+          position: 'before dispatch'
+          middleware: 'DMF\SitePackage\Http\HeadMiddleware'
