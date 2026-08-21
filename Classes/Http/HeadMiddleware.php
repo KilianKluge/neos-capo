@@ -35,21 +35,23 @@ class HeadMiddleware implements MiddlewareInterface
         $body = Parser::reorder_head(strval($body), $usedOptions);
 
         $analysis = Parser::get_last_analysis();
-        if ($usedOptions['debug']) {
-            $this->logger->debug('Capo: element_count'.$analysis['element_count'].', elapsed:'.$analysis['elapsed_ms'].', warnings'.count($analysis['warnings']).', tokens:'.count($analysis['tokens']));
+        if (isset($usedOptions['debug'])) {
+            $this->logger->debug('Capo: element_count'.$analysis['element_count'].', elapsed:'.$analysis['elapsed_ms'].', warnings'.count($analysis['warnings']).', tokens:'.count($analysis['tokens']), LogEnvironment::fromMethodName(__METHOD__));
         }
-        if ($usedOptions['display_warnings']) {
+        if (isset($usedOptions['display_warnings'])) {
             $warnings = $analysis['warnings'];
-            $this->logger->warning('Warnings: '.count($warnings));
+            if (count($warnings)>0) {
+                $this->logger->warning('Warnings: '.count($warnings), LogEnvironment::fromMethodName(__METHOD__));
+            }
             foreach ($warnings as $warning) {
-                $this->logger->warning($warning);
+                $this->logger->warning($warning['severity'].': '.$warning['warning'].($warning['element_html'] ? ' in '.$warning['element_html'] : ''), LogEnvironment::fromMethodName(__METHOD__));
             }
         }
-        if ($usedOptions['display_weights']) {
+        if (isset($usedOptions['display_weights'])) {
             $tokens = $analysis['tokens'];
-            $this->logger->debug('Tokens: '.count($tokens));
+            $this->logger->debug('Tokens: '.count($tokens), LogEnvironment::fromMethodName(__METHOD__));
             foreach ($tokens as $token) {
-                $this->logger->debug($token['tag_name'].': '.$token['weight']);
+                $this->logger->debug($token['tag_name'].': '.$token['weight'], LogEnvironment::fromMethodName(__METHOD__));
             }
         }
 
