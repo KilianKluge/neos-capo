@@ -1,6 +1,6 @@
 <?php
 
-namespace DMF\SitePackage\Http;
+namespace DMF\Capo\Http;
 
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\ResponseInterface;

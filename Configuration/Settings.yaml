@@ -8,4 +8,4 @@ Neos:
       middlewares:
         'head':
           position: 'before dispatch'
-          middleware: 'DMF\SitePackage\Http\HeadMiddleware'
+          middleware: 'DMF\Capo\Http\HeadMiddleware'

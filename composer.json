@@ -11,7 +11,7 @@
   },
   "autoload": {
     "psr-4": {
-      "DMF\\CAPO\\": "Classes/"
+      "DMF\\Capo\\": "Classes/"
     }
   },
   "extra": {
