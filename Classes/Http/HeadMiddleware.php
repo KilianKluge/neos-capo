@@ -2,6 +2,7 @@
 
 namespace DMF\Capo\Http;
 
+use Capo\Parser;
 use Neos\Flow\Annotations as Flow;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -21,7 +22,10 @@ class HeadMiddleware implements MiddlewareInterface
     {
         // TODO: Implement process() method.
         $response = $handler->handle($request);
-        $this->logger->info("Head Middleware Response : " . $response->getBody());
-        return $response;
+        $body = $response->getBody();
+        $this->logger->info("Head Middleware Response : " . $body);
+        $body = Parser::reorder_head($body);
+        $this->logger->info("Head Middleware Response : " . $body);
+        return $response->withBody($body);
     }
 }
