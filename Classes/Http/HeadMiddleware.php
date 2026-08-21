@@ -30,32 +30,40 @@ class HeadMiddleware implements MiddlewareInterface
         $usedOptions = $this->options ?? [];
 
         $response = $handler->handle($request);
-        $body = $response->getBody();
 
-        $body = Parser::reorder_head(strval($body), $usedOptions);
+        try {
+            $body = $response->getBody();
+            $body = Parser::reorder_head(strval($body), $usedOptions);
 
-        $analysis = Parser::get_last_analysis();
-        if (isset($usedOptions['debug'])) {
-            $this->logger->debug('Capo: element_count'.$analysis['element_count'].', elapsed:'.$analysis['elapsed_ms'].', warnings'.count($analysis['warnings']).', tokens:'.count($analysis['tokens']), LogEnvironment::fromMethodName(__METHOD__));
-        }
-        if (isset($usedOptions['display_warnings'])) {
-            $warnings = $analysis['warnings'];
-            if (count($warnings)>0) {
-                $this->logger->warning('Warnings: '.count($warnings), LogEnvironment::fromMethodName(__METHOD__));
+            $analysis = Parser::get_last_analysis();
+            if ($analysis) {
+                if (isset($usedOptions['debug'])) {
+                    $this->logger->debug('Capo: element_count'.$analysis['element_count'].', elapsed:'.$analysis['elapsed_ms'].', warnings'.count($analysis['warnings']).', tokens:'.count($analysis['tokens']), LogEnvironment::fromMethodName(__METHOD__));
+                }
+                if (isset($usedOptions['display_warnings'])) {
+                    $warnings = $analysis['warnings'];
+                    if (count($warnings)>0) {
+                        $this->logger->warning('Warnings: '.count($warnings), LogEnvironment::fromMethodName(__METHOD__));
+                    }
+                    foreach ($warnings as $warning) {
+                        $this->logger->warning($warning['severity'].': '.$warning['warning'].($warning['element_html'] ? ' in '.$warning['element_html'] : ''), LogEnvironment::fromMethodName(__METHOD__));
+                    }
+                }
+                if (isset($usedOptions['display_weights'])) {
+                    $tokens = $analysis['tokens'];
+                    $this->logger->debug('Tokens: '.count($tokens), LogEnvironment::fromMethodName(__METHOD__));
+                    foreach ($tokens as $token) {
+                        $this->logger->debug($token['tag_name'].': '.$token['weight'], LogEnvironment::fromMethodName(__METHOD__));
+                    }
+                }
             }
-            foreach ($warnings as $warning) {
-                $this->logger->warning($warning['severity'].': '.$warning['warning'].($warning['element_html'] ? ' in '.$warning['element_html'] : ''), LogEnvironment::fromMethodName(__METHOD__));
-            }
-        }
-        if (isset($usedOptions['display_weights'])) {
-            $tokens = $analysis['tokens'];
-            $this->logger->debug('Tokens: '.count($tokens), LogEnvironment::fromMethodName(__METHOD__));
-            foreach ($tokens as $token) {
-                $this->logger->debug($token['tag_name'].': '.$token['weight'], LogEnvironment::fromMethodName(__METHOD__));
-            }
+
+            $stream = ContentStream::fromContents($body);
+            $response = $response->withBody($stream);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage(), $e->getTrace());
         }
 
-        $stream = ContentStream::fromContents($body);
-        return $response->withBody($stream);
+        return $response;
     }
 }
