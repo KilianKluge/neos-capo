@@ -10,7 +10,7 @@
  * @license GPL-2.0-or-later
  */
 
-namespace Capo;
+namespace DMF\Capo\Capo;
 
 defined( 'ABSPATH' ) || exit;
 
