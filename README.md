@@ -7,7 +7,7 @@ Based upon: <br>
 
 ---
 
-Reorders the `<head>` of your word press pages for a faster FCP and better web performance.
+Reorders the `<head>` of your Neos pages for a faster FCP and better web performance.
 
 All you need to do is simply require this package in your Neos project.
 
