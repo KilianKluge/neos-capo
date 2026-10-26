@@ -1,12 +1,12 @@
 {
   "name": "dmf/neos-capo",
-  "description": "Implements automatic capo <head> sorting for Neos.",
+  "description": "Adds automatic capo <head> sorting for Neos.",
   "type": "neos-package",
   "version": "1.0.0",
   "license": "GPL-2.0-or-later",
   "authors": [],
   "require": {
-    "neos/flow": "^8.0 | ^9.0",
+    "neos/flow": "^7.0 | ^8.0 | ^9.0",
     "psr/http-message": "^1.0"
   },
   "autoload": {
