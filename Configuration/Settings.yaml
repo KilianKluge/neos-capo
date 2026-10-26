@@ -6,7 +6,7 @@ Neos:
   Flow:
     http:
       middlewares:
-        'head':
+        'capo-head':
           position: 'before dispatch'
           middleware: 'DMF\Capo\Http\HeadMiddleware'
 Capo:
