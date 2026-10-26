@@ -219,7 +219,7 @@ ${keywordsList}
 	}
 
 	/**
-	 * Check if element is a style element containing @import rules.
+	 * Check if element is a style element containing '@import' rules.
 	 *
 	 * @param string $tag_name Tag name.
 	 * @param array  $attrs    Element attributes.
