@@ -31,6 +31,10 @@ class HeadMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
+        if (!$this->shouldProcess($request, $response)) {
+            return $response;
+        }
+
         try {
             $body = $response->getBody();
             $body = Parser::reorder_head(strval($body), $usedOptions);
@@ -65,5 +69,23 @@ class HeadMiddleware implements MiddlewareInterface
         }
 
         return $response;
+    }
+
+    public function shouldProcess(ServerRequestInterface $request, ResponseInterface $response): bool
+    {
+        if ($this->options && !($this->options['enabled'] ?? true)) return false;
+
+        if (!str_contains($response->getHeaderLine('Content-Type'), 'text/html')) return false;
+
+        $queryParams = $request->getQueryParams();
+
+        if (isset($queryParams['capo']) && !$queryParams['capo']) {
+            $capo = strtolower($queryParams['capo']);
+            if (in_array($capo, array( '0', 'off', 'false', 'no', 'disabled' ), true)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

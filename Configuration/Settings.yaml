@@ -12,3 +12,4 @@ Neos:
 Capo:
   options:
     display_warnings: true
+    enabled: true
